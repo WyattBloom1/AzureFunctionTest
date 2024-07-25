@@ -21,7 +21,7 @@ async function getEmployeeByID(request, context) {
     }
 };
 
-const createEmployee = async (req, res) => {
+const createEmployee = async (req, res) => { 
     const { body } = req;
     var missingValues = '';
     missingValues += (!body.EmployeeName) ? 'Name, ' : '';

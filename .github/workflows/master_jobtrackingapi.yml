@@ -82,10 +82,10 @@ env:
   AZURE_FUNCTIONAPP_NAME: 'JobTrackingAPI'   # set this to your function app name on Azure
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'       # set this to the path to your function app project, defaults to the repository root
   NODE_VERSION: '8'                      # set this to the node version to use (e.g. '8.x', '10.x', '12.x')
-  
-permissions:
-  id-token: write
-  contents: read
+
+# permissions:
+#   id-token: write
+#   contents: read
 jobs:
   build-and-deploy:
     runs-on: windows-latest # For Linux, use ubuntu-latest
@@ -100,6 +100,15 @@ jobs:
     #   with:
     #     creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }} # set up AZURE_RBAC_CREDENTIALS secrets in your repository
 
+    - name: Login to Azure
+      uses: azure/login@v2
+      with:
+        auth-type: IDENTITY
+        client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3A3CFED147AF4B09911D88A590649AF0 }}
+        tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F30D830F6DBA483BA6A51D10B45DD262 }}
+        subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8D6CD1A7C25B48E6A0C6E6618D24EBEC }}
+        enable-AzPSSession: true
+
     - name: Setup Node ${{ env.NODE_VERSION }} Environment
       uses: actions/setup-node@v3
       with:
@@ -113,13 +122,6 @@ jobs:
         npm run build --if-present
         npm run test --if-present
         popd
-
-    - name: Login to Azure
-      uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3A3CFED147AF4B09911D88A590649AF0 }}
-        tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F30D830F6DBA483BA6A51D10B45DD262 }}
-        subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8D6CD1A7C25B48E6A0C6E6618D24EBEC }}
 
     # - name: Login to Azure
     #   uses: azure/login@v2

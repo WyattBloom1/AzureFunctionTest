@@ -1,4 +1,3 @@
-const { Cipher } = require("node:crypto");
 const SQL = require("../../database/SQLQueries");
 const knex = require("../../database/Knex").knex;
 const fs = require("node:fs");
@@ -556,7 +555,6 @@ const batchInsert_Legacy = async (jobsTable) => {
 const importJob = async (mainParams) => {
   try {
     var params = mainParams; //[0];
-    // var address = await getLatLongFromAddress(params.clientAddress, params.cityName);
 
     let jobExists = await knex.raw(`EXEC GetJobByID @jobNumber = ?`, [
       params.jobNumber,
@@ -625,7 +623,7 @@ function writeJobInfo(params, clientId, address) {
 }
 
 const createLegacyJob = async (params) => {
-  var address = await getLatLongFromAddress(params.jobAddress, params.cityName);
+  var address = {};
 
   const insertedJobInfo = await knex
     .transaction(async (trx) => {
@@ -668,71 +666,6 @@ const createLegacyJob = async (params) => {
   return insertedJobInfo;
 };
 
-const googleMapsClient = require("@google/maps").createClient({
-  key: "AIzaSyDSpqJxeXlCAVpAVvJ_aFw1r1AJZgkqEyI",
-  Promise: Promise,
-});
-const getLatLongFromAddress = async (address, city = "") => {
-  const response = googleMapsClient
-    .geocode({ address: address + (city == "" ? "" : ", " + city) })
-    .asPromise()
-    .then((response) => {
-      if (response.json.status == "OK") {
-        var formatAddress = "";
-        var county = "";
-        var hasStreet = false;
-
-        response.json.results[0].geometry.location["City"] = city;
-        response.json.results[0].geometry.location["Address"] = address;
-
-        response.json.results[0].address_components.forEach((item) => {
-          switch (item.types[0]) {
-            case "street_number":
-              formatAddress = item.short_name;
-              hasStreet = true;
-              break;
-            case "route":
-              formatAddress += " " + item.short_name;
-              break;
-            case "locality":
-              city = item.short_name;
-              formatAddress += ", " + item.short_name;
-              break;
-            case "administrative_area_level_1":
-              response.json.results[0].geometry.location["City"] = city;
-              formatAddress += ", " + item.short_name;
-              break;
-            case "administrative_area_level_2":
-              response.json.results[0].geometry.location["County"] =
-                item.short_name;
-              break;
-          }
-        });
-
-        if (hasStreet)
-          response.json.results[0].geometry.location["Address"] = formatAddress;
-        else {
-          response.json.results[0].geometry.location.lat = "0";
-          response.json.results[0].geometry.location.lng = "0";
-        }
-        // console.log(response.json.results[0].geometry.location);
-        return response.json.results[0].geometry.location;
-      } else {
-        return new Object({
-          Address: address,
-          City: city,
-          County: "",
-          lat: "0",
-          lng: "0",
-        });
-      }
-    })
-    .catch((err) => {
-      // console.error("Get address failed: " + err);
-      throw err;
-    });
-  return response;
-};
 
 // Using a store procedure
 const setJobStatus = async (jobId, params) => {

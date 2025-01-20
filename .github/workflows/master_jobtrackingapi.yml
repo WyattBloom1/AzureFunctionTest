@@ -3,7 +3,7 @@ name: Build and deploy Powershell project to Azure Function App - <App_Name>
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 env:

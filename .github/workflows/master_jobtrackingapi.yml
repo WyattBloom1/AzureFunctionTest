@@ -23,8 +23,15 @@ jobs:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v4
 
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_9DA6793132194015AA47CDD29C840946 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FFCD2CCF61F344DFADD121464D4D17E9 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_85216BCB611F47D7A679F16F92A6782E }}
+
       - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v2
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -34,13 +41,6 @@ jobs:
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
           dotnet build --configuration Release --output ./output
           popd
-      
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_9DA6793132194015AA47CDD29C840946 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FFCD2CCF61F344DFADD121464D4D17E9 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_85216BCB611F47D7A679F16F92A6782E }}
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1

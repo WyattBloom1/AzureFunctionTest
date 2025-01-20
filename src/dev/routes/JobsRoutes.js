@@ -1,5 +1,5 @@
 // In src/v1/routes/workoutRoutes.js
-const { app, HttpResponse } = require('@azure/functions');
+const { app } = require('@azure/functions');
 const JobsController = require("../controllers/JobsController");
 
 

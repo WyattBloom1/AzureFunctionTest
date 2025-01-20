@@ -2,7 +2,7 @@ const employeeService = require("../services/EmployeeServices");
 
 // In src/controllers/workoutController.js
 async function getAllEmployees(request, context) {
-    try 
+    try  
     {
         const allEmployees = await employeeService.getAllEmployees();
         // .then(data => {

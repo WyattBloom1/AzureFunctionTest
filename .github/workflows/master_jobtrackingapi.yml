@@ -104,7 +104,7 @@ jobs:
       uses: azure/login@v2
       with:
         auth-type: IDENTITY
-        client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3A3CFED147AF4B09911D88A590649AF0 }}
+        # client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3A3CFED147AF4B09911D88A590649AF0 }}
         tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F30D830F6DBA483BA6A51D10B45DD262 }}
         subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8D6CD1A7C25B48E6A0C6E6618D24EBEC }}
         enable-AzPSSession: true

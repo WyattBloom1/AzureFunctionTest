@@ -72,7 +72,7 @@ jobs:
         uses: Azure/functions-action@v1
         id: fa
         with:
-          app-name: 'FunctionAPI-WyattsServer'
+          app-name: 'JobTrackingAPI'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           

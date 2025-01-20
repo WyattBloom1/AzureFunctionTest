@@ -13,11 +13,60 @@ app.http('getEmployees', {
     route: 'employees',
     authLevel: 'anonymous',
     handler: async (request, context) => {
-        var employeeID = request.query.get('id');
-        return (employeeID == null) ? await EmployeeController.getAllEmployees(request, context) : await EmployeeController.getEmployeeByID(request, context);
+        context.log(`Http GET function processed request for url "${request.url}"`);
+        try {
+            context.log(JSON.stringify(request.params));
+            
+            let status = await EmployeeController.getEmployees(request.params, context)
+            return status;
+        } catch (err) {
+            console.log("Route Error: " + err);
+        }
+
+
     }
 })
 
+app.http('updateEmployees', {
+    methods: ['POST'],
+    route: 'employees',
+    authLevel: 'anonymous',
+    handler: async (request, context) => {
+        context.log(`Http function processed request for url "${request.url}"`);
+        console.log("Reuqest: " + request);
+        
+        const employeeID = request.query.get('id');
+        const requestBody = await request.text();
+        if(employeeID == null)
+            return await EmployeeController.createEmployee(request, requestBody, context);
+        else
+            return await EmployeeController.updateEmployee(request, requestBody, context);
+    }
+})
+
+app.http('deleteEmployee', {
+    methods: ['DELETE'],
+    route: 'employees',
+    authLevel: 'anonymous',
+    handler: async (request, context) => {
+        context.log(`Http function processed request for url "${request.url}"`);
+
+        const employeeID = request.query.get('id');
+        return await EmployeeController.deleteEmployee(request, employeeID, context);
+    }
+})
+
+// app.http('RestAPI-Function', {
+//     methods: ['GET', 'POST'],
+//     authLevel: 'anonymous',
+//     handler: async (request, context) => {
+//         context.log(`Http function processed request for url "${request.url}"`);
+
+//         const name = request.query.get('name') || await request.text() || 'world';
+
+//         return { body: `Hello, ${name}!` };
+//     }
+// });
 
 // Specified GET - returns details for one Employee
 app.http('getEmployeeByID', {

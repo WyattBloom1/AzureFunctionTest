@@ -1,6 +1,6 @@
 // In src/v1/routes/workoutRoutes.js
 const { app } = require('@azure/functions');
-const MessageController = require("../controllers/MessageController");
+const MessageController = require("../controllers/MessagesController");
 
 
 app.setup({

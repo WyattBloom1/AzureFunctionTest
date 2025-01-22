@@ -1,6 +1,6 @@
 const { HttpResponse } = require("@azure/functions");
 const https = require('https');
-const messageService = require("../services/MessageService");
+const messageService = require("../services/MessagesService");
 
 // In src/controllers/workoutController.js
 async function getMessages(request, context) {
